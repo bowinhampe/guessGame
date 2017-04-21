@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         // Buttons
         Button addPlayer = new Button(this);
         addPlayer.setText("ADD PLAYER");
+        addPlayer.setTextSize(40);
         addPlayer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Button startGame = new Button(this);
+        startGame.setTextSize(40);
         startGame.setText("START!");
         startGame.setOnClickListener(new View.OnClickListener() {
             @Override

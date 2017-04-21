@@ -9,6 +9,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,10 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void initiateGUI(){
+        if(players.size()==0){
+            this.finish();
+            return;
+        }
         start = new Button(this);
         Button endGame = new Button(this);
         Button next = new Button(this);
@@ -56,12 +61,16 @@ public class GameActivity extends AppCompatActivity {
         LinearLayout playerLayout;
         activePlayer = new TextView(this);
 
-        word.setTextSize(110);
+
+        word.setTextSize(100);
         start.setText("START");
+        next.setTextSize(20);
         next.setText("NEXT WORD");
         word.setText("WORD");
         endGame.setText("FINISH AND SHOW POINTS");
-        activePlayer.setText(players.get(playerTurn).getName());
+        activePlayer.setText("PLAYER: "+players.get(playerTurn).getName());
+        activePlayer.setTextSize(20);
+        activePlayer.setGravity(Gravity.CENTER);
         gameLayout.addView(start);
         gameLayout.addView(activePlayer);
         gameLayout.addView(word);
@@ -85,11 +94,18 @@ public class GameActivity extends AppCompatActivity {
                 nextWord();
             }
         });
+
+        playerLayout = new LinearLayout(this);
+        playerLayout.setOrientation(LinearLayout.HORIZONTAL);
         for(int i=0;i<players.size();i++) {
-            playerLayout = new LinearLayout(this);
-            playerLayout.setOrientation(LinearLayout.HORIZONTAL);
+            if(i%3==0){
+                gameLayout.addView(playerLayout);
+                playerLayout = new LinearLayout(this);
+                playerLayout.setOrientation(LinearLayout.HORIZONTAL);
+            }
             player = new Button(this);
             player.setText(players.get(i).getName());
+            player.setTextSize(15);
             player.setId(i);
             Log.d("TEST",players.get(i).getName());
             player.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +118,8 @@ public class GameActivity extends AppCompatActivity {
                 }
             });
             playerLayout.addView(player);
-            gameLayout.addView(playerLayout);
         }
+        gameLayout.addView(playerLayout);
         gameLayout.addView(endGame);
     }
 
@@ -159,7 +175,7 @@ public class GameActivity extends AppCompatActivity {
     }
     private void nextWord(){
         if(gameOn) {
-            if (startTime <= System.currentTimeMillis()) {
+            if (startTime >= System.currentTimeMillis()) {
                 if (!gameWords.isEmpty()) {
                     word.setText(gameWords.pop());
                 } else {
@@ -174,11 +190,16 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void endRound(){
+        Toast toast = new Toast(this);
+        toast.makeText(this, "TIMES UP! NEXT PLAYER", Toast.LENGTH_LONG);
         gameOn=false;
         playerTurn++;
         if(playerTurn>=players.size()){
             playerTurn=0;
         }
+        activePlayer.setText("PLAYER: "+players.get(playerTurn).getName());
+        start.setVisibility(View.VISIBLE);
+        word.setText("Word");
     }
 
     private void mixNumbers(){
