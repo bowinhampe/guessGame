@@ -62,10 +62,12 @@ public class GameActivity extends AppCompatActivity {
         activePlayer = new TextView(this);
 
 
-        word.setTextSize(100);
+        word.setTextSize(60);
         start.setText("START");
         next.setTextSize(20);
         next.setText("NEXT WORD");
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(1000,300);
+        next.setLayoutParams(lp);
         word.setText("WORD");
         endGame.setText("FINISH AND SHOW POINTS");
         activePlayer.setText("PLAYER: "+players.get(playerTurn).getName());
@@ -112,8 +114,15 @@ public class GameActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if(gameOn) {
-                        players.get(v.getId()).addPoint();
-                        nextWord();
+                        if(v.getId()==playerTurn){
+                            Toast toast = Toast.makeText(getBaseContext(),"YOU CANT GIVE YOURSELF POINTS!",Toast.LENGTH_LONG);
+                            toast.show();
+                        }
+                        else {
+                            players.get(v.getId()).addPoint();
+                            players.get(playerTurn).addPoint();
+                            nextWord();
+                        }
                     }
                 }
             });
@@ -151,7 +160,9 @@ public class GameActivity extends AppCompatActivity {
 
         for(int i=0;i<players.size();i++){
             pName = new TextView(this);
+            pName.setTextSize(50);
             points = new TextView(this);
+            points.setTextSize(50);
             llP = new LinearLayout(this);
             llP.setOrientation(LinearLayout.HORIZONTAL);
             pName.setText(players.get(i).getName());
@@ -165,10 +176,12 @@ public class GameActivity extends AppCompatActivity {
 
     }
     private void startRound(){
+        Toast toast = Toast.makeText(this,"You got 30 Seconds!!",Toast.LENGTH_LONG);
+        toast.show();
         gameOn=true;
         start.setVisibility(View.INVISIBLE);
         word.setText(gameWords.pop());
-
+        Log.d("STARTED","test");
         startTime = System.currentTimeMillis() + 30000;
 
         //(new Thread(new GameLoop(activePlayer, start))).start();
@@ -179,8 +192,9 @@ public class GameActivity extends AppCompatActivity {
                 if (!gameWords.isEmpty()) {
                     word.setText(gameWords.pop());
                 } else {
-                    Toast toast = new Toast(this);
-                    toast.makeText(this, "No more words GAME OVER!", Toast.LENGTH_LONG);
+                    Toast toast = Toast.makeText(this, "No more words GAME OVER!", Toast.LENGTH_LONG);
+                    toast.show();
+                    endGame();
                 }
             }
             else{
@@ -190,8 +204,8 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void endRound(){
-        Toast toast = new Toast(this);
-        toast.makeText(this, "TIMES UP! NEXT PLAYER", Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, "TIMES UP! NEXT PLAYER", Toast.LENGTH_LONG);
+        toast.show();
         gameOn=false;
         playerTurn++;
         if(playerTurn>=players.size()){
