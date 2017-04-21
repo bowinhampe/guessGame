@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     ArrayList<EditText> mTextBoxes;
     LinearLayout baseLayout;
-    final private boolean DEBUG = true;
+    final private boolean DEBUG = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

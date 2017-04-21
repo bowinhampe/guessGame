@@ -18,6 +18,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Stack;
 
 public class GameActivity extends AppCompatActivity {
@@ -158,6 +161,7 @@ public class GameActivity extends AppCompatActivity {
         TextView pName;
         TextView points;
 
+
         for(int i=0;i<players.size();i++){
             pName = new TextView(this);
             pName.setTextSize(50);
@@ -165,7 +169,7 @@ public class GameActivity extends AppCompatActivity {
             points.setTextSize(50);
             llP = new LinearLayout(this);
             llP.setOrientation(LinearLayout.HORIZONTAL);
-            pName.setText(players.get(i).getName());
+            pName.setText(players.get(i).getName()+":  ");
             points.setText(Integer.toString(players.get(i).getPoints()));
 
             llP.addView(pName);
@@ -175,6 +179,7 @@ public class GameActivity extends AppCompatActivity {
         }
 
     }
+
     private void startRound(){
         Toast toast = Toast.makeText(this,"You got 30 Seconds!!",Toast.LENGTH_LONG);
         toast.show();
